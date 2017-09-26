@@ -12,7 +12,11 @@
     <h2>Subreddit: {{post.subreddit}}</h2>
 </a>
 
-<form action="/posts/{{post._id}}/comments">
-    <textarea class="form-control" name="content" rows="3" placeholder="Comment">1</textarea>
+<form action="/posts/{{post._id}}/comments" method="POST">
+    <textarea class="form-control" name="content" rows="3" placeholder="Comment"></textarea>
     <button type="submit">Save</button>
 </form>
+
+{{#each post.comments}}
+    <p>{{this.content}}</p>
+{{/each}}

@@ -1,4 +1,5 @@
 var Comment = require('../models/comment')
+var Post = require('../models/post')
 
 module.exports = function(app) {
 
@@ -7,10 +8,16 @@ module.exports = function(app) {
         //new instance of comment model
         var comment = new Comment(req.body)
 
-        //save instance to DB
-        comment.save(function (err, comment) {
-            console.log(comment)
-            return res.redirect('/')
+        Post.findById(req.params.postId).exec(function (err, post) {
+            //save instance to DB
+            comment.save(function (err, comment) {
+                console.log(post)
+                post.comments.unshift(comment)
+                post.save()
+
+                console.log(comment)
+                return res.redirect('/posts/' + post._id)
+            })
         })
     })
 }

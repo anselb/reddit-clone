@@ -9,6 +9,12 @@
     <ul>
         <li><a href="">Subreddits</a></li>
         <li><a href="">Sort/Filters</a></li>
+        {{#if currentUser}}
+            <li><a href="/logout">Logout</a></li>
+        {{else}}
+            <li><a href="/login">Login</a></li>
+            <li><a href="/sign-up">Sign Up</a></li>
+        {{/if}}
     </ul>
 
     {{{body}}}

@@ -1,7 +1,7 @@
 var Post = require('../models/post')
 
 module.exports = function(app) {
-    
+
     //POST(create) new post
     app.post('/posts', function (req, res) {
         //create instance of Post model
@@ -16,13 +16,14 @@ module.exports = function(app) {
 
     //GET new post form
     app.get('/posts/new', function (req, res) {
-        res.render('posts-new', {})
+        res.render('posts-new', {currentUser: currentUser})
     })
 
     //GET specific post
     app.get('/posts/:id', function (req, res) {
-        Post.findById(req.params.id).exec(function (err, post) {
-            res.render('posts-show', {post: post})
+        //populate add comments
+        Post.findById(req.params.id).populate('comments').exec(function (err, post) {
+            res.render('posts-show', {post: post, currentUser: currentUser})
         })
     })
 
