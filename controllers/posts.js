@@ -1,30 +1,67 @@
 var Post = require('../models/post')
+var User = require('../models/user')
 
 module.exports = function(app) {
 
     //POST(create) new post
-    app.post('/posts', function (req, res) {
+    // / posts/
+    app.post('/posts/new', function (req, res) {
+        console.log("Post /post/new");
         //create instance of Post model
-        var post = new Post(req.body)
+        User.findById(req.user._id).exec(function (err, user) {
+            // const new Post({
+            //     title: req.body.title,
+            //     body: req.body.body,
+            //     url: { type: String, required: true },
+            //     subreddit: { type: String, required: true },
+            //     author: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+            // })
 
-        //save instance of post model to DB
-        post.save(function (err, post) {
-            console.log(post)
-            return res.redirect('/posts/' + post._id)
+            const body = req.body;
+            body.author = user._id;
+
+            var post = new Post(body);
+            //save instance of post model to DB
+            post.save(function (err, post) {
+                console.log(post)
+                return res.redirect('/')
+                //return res.redirect('/posts/' + post._id)
+            })
         })
     })
 
     //GET new post form
     app.get('/posts/new', function (req, res) {
-        res.render('posts-new', {currentUser: currentUser})
+        var currentUser = req.user
+
+        res.render('posts-new', { currentUser: currentUser });
     })
 
     //GET specific post
     app.get('/posts/:id', function (req, res) {
+        var currentUser = req.user
+
         //populate add comments
-        Post.findById(req.params.id).populate('comments').exec(function (err, post) {
-            res.render('posts-show', {post: post, currentUser: currentUser})
-        })
+        Post.findById(req.params.id)
+            .populate('author')
+            // .populate({
+            //     path: 'comments',
+            //     model: 'Comment',
+            //     populate: {
+            //         path: 'author',
+            //         model: 'User'
+            //     }
+            // })
+            .populate('comments.author')
+            .exec(function (err, post) {
+            res.render('posts-show', { post: post, currentUser: currentUser })
+        });
+
+        // Post.findById(req.params.id).populate('comments').then((post) => {
+        //     res.render('posts-show', { post: post, currentUser: currentUser })
+        // }).catch((err) => {
+        //     console.log(err.message);
+        // });
     })
 
 }

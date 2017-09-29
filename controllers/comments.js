@@ -5,14 +5,20 @@ module.exports = function(app) {
 
     //POST(create) new comment
     app.post('/posts/:postId/comments', function (req, res) {
+        const body = req.body;
+        body.author = req.user._id;
         //new instance of comment model
-        var comment = new Comment(req.body)
+        var comment = new Comment(body)
+        // var comment = req.body;
 
-        Post.findById(req.params.postId).exec(function (err, post) {
+        Post.findById(req.params.postId)
+        //.populate('comments.author')
+        .exec(function (err, post) {
+            console.log(req.params)
             //save instance to DB
             comment.save(function (err, comment) {
                 console.log(post)
-                post.comments.unshift(comment)
+                post.comments.unshift(comment);
                 post.save()
 
                 console.log(comment)

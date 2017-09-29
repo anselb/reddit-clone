@@ -6,6 +6,8 @@
     <h1>Post Title: {{post.title}}</h1>
 </a>
 
+<p>Username: {{post.author.username}}</p>
+
 <p>{{post.body}}</p>
 
 <a href="/n/{{post.subreddit}}">
@@ -18,5 +20,7 @@
 </form>
 
 {{#each post.comments}}
-    <p>{{this.content}}</p>
+    {{> comment }}
 {{/each}}
+
+<p>template: posts-show.hbs</p>

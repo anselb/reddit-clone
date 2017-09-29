@@ -16,7 +16,9 @@
             <li><a href="/sign-up">Sign Up</a></li>
         {{/if}}
     </ul>
-
+    {{#if currentUser}}
+        <p>Hello {{currentUser}}</p>
+    {{/if}}
     {{{body}}}
 
 </body>

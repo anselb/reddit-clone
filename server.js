@@ -18,10 +18,6 @@ app.use(bodyParser.urlencoded({ extended: true}))
 app.use(methodOverride('_method'))
 app.use(cookieParser())
 
-require('./controllers/posts.js')(app)
-require('./controllers/comments.js')(app)
-require('./controllers/auth.js')(app)
-
 var checkAuth = function(req, res, next) {
     console.log("Checking authentication")
 
@@ -37,16 +33,23 @@ var checkAuth = function(req, res, next) {
 
 app.use(checkAuth)
 
+require('./controllers/posts.js')(app)
+require('./controllers/comments.js')(app)
+require('./controllers/auth.js')(app)
+require('./controllers/replies.js')(app)
+
 //GET reddit index
 app.get ('/', function (req, res) {
     var currentUser = req.user
 
     Post.find().exec(function (err, posts) {
-        res.render('posts-index', {posts: posts, currentUser: currentUser})
+        res.render('posts-index', { posts: posts, currentUser: currentUser })
     })
 })
 
 app.get('/n/:subreddit', function (req, res) {
+    var currentUser = req.user
+
     Post.find({ subreddit: req.params.subreddit }).exec(function (err, posts) {
         res.render('posts-index', {posts: posts, currentUser: currentUser})
     })
@@ -65,7 +68,7 @@ app.get('/login', function(req, res, next) {
 
 //login post
 app.post('/login', function(req, res, next) {
-    User.findOne({ email: req.body.email }, "+password", function (err, user) {
+    User.findOne({ username: req.body.username }, "+password", function (err, user) {
         if ( !user ) { return res.status(401).send({ message: 'Wrong email or password' }) }
         user.comparePassword(req.body.password, function (err, isMatch) {
             if ( !isMatch ) {

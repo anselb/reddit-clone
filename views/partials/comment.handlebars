@@ -1,0 +1,8 @@
+<div class="comment-indent">
+        <p>User: {{this.author.username}}</p>
+        <p>{{this.content}}</p>
+        <a href='/posts/{{../post._id}}/comments/{{this._id}}/replies/new'>Reply</a>
+    {{#each this.comments}}
+        {{> comment}}
+    {{/each}}
+</div>

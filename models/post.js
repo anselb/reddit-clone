@@ -1,14 +1,19 @@
 var mongoose = require('mongoose'),
-    Schema = mongoose.Schema
+    Schema = mongoose.Schema,
+    Comment = require('./comment')
 
 var PostSchema = new Schema({
     createdAt: { type: Date },
     updatedAt: { type: Date },
+
     title: { type: String, required: true },
     body: { type: String, required: false },
     url: { type: String, required: true },
     subreddit: { type: String, required: true },
-    comments: [{ type : Schema.Types.ObjectId, ref : 'Comment'}]
+    author: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+
+    comments: [ Comment.schema ]
+    //comments: [{ type : Schema.Types.ObjectId, ref : 'Comment'}]
 })
 
 PostSchema.pre('save', function(next) {
@@ -17,7 +22,6 @@ PostSchema.pre('save', function(next) {
     if ( !this.createdAt ) {
         this.createdAt = now
     }
-
     next()
 })
 
