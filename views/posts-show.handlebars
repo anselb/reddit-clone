@@ -14,6 +14,16 @@
     <h2>Subreddit: {{post.subreddit}}</h2>
 </a>
 
+<form class="vote-up" data-id="{{post._id}}">
+    <button type="submit">Vote Up</button>
+</form>
+
+<form class="vote-down" data-id="{{post._id}}">
+    <button type="submit">Vote Down</button>
+</form>
+
+<p>{{post.voteScore}}</p>
+
 <form action="/posts/{{post._id}}/comments" method="POST">
     <textarea class="form-control" name="content" rows="3" placeholder="Comment"></textarea>
     <button type="submit">Save</button>
