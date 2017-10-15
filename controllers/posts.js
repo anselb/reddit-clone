@@ -4,13 +4,20 @@ var User = require('../models/user')
 module.exports = function(app) {
     //upvote
     app.put('/posts/:id/vote-up', function(req, res) {
+
+        console.log("**** post/:id/vote-up", req.params.id);
+
         Post.findById(req.params.id).exec(function (err, post) {
-            console.log(post)
+            console.log("up votes", post.upVotes);
             post.upVotes.push(req.user._id)
             post.voteScore = post.voteTotal + 1
-            post.save()
+            post.save().then((post) => {
+                console.log("up votes", post.upVotes);
+                res.status(200);
+            }).catch((err) => {
+                console.log(err);
+            });
 
-            res.status(200)
         })
     })
 
@@ -77,6 +84,7 @@ module.exports = function(app) {
             .populate('comments.author')
             .exec(function (err, post) {
             res.render('posts-show', { post: post, currentUser: currentUser })
+            //mark modified, add postid to comment
         });
 
         // Post.findById(req.params.id).populate('comments').then((post) => {
