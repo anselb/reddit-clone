@@ -7,6 +7,7 @@ module.exports = function(app) {
     app.post('/posts/:postId/comments', function (req, res) {
         const body = req.body;
         body.author = req.user._id;
+        body.postId = req.params.postId
         //new instance of comment model
         var comment = new Comment(body)
         // var comment = req.body;

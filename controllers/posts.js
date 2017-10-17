@@ -48,7 +48,6 @@ module.exports = function(app) {
 
             const body = req.body;
             body.author = user._id;
-
             var post = new Post(body);
             //save instance of post model to DB
             post.save(function (err, post) {

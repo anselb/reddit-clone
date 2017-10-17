@@ -5,7 +5,7 @@ var CommentSchema = new Schema({
     content: { type: String, required: true },
     comments: [ this ],
     author: { type: Schema.Types.ObjectId, ref: 'User', required: false },
-    post: { type: String, required: true }
+    postId: { type: Schema.Types.ObjectId, ref: 'Post', required: true }
 })
 
 //CommentSchema.add({comments: [ CommentSchema ]})

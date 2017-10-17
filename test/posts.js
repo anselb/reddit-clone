@@ -113,23 +113,34 @@ it('Should find a user with valid properties', (done) => {
 // check that user is gone
 
 it('Should remove a user', (done) => {
+    // var newUser = User({})                  // made new user
+    // newUser.save().then((user) => {         // saved user
+    //     return User.findById(newUser._id)   // find newUser
+    // }).then((user) => {
+    //     // is user the newUser?            // ?
+    //
+    //     return user.remove();              // remove newUser
+    // }).then(() => {
+    //     //
+    //     return User.findById(newUser._id); // find newUser
+    // }).then(() => {
+    //
+    // })
+    //
+    //
+    //
+    // User.find({}).then((users)=>{
+    //     // expsct an array
+    //
+    // })
     User.find({}).then((users) => {
         expect(users).to.be.an('array');
-        console.log('--------------------')
-        console.log(users.length)
-        return users.length - 1
-    }).then((userCount) => {
-        User.findOneAndRemove({ username: 'testUser' }, function (err) {
-            return err
-        })
-        User.find({}).then(function(users) {
-            console.log(users.length)
-            console.log(userCount)
-            expect(users.length).to.equal(userLength)
-            var newUserCount = users.length
-        })
-        console.log('Teststst')
-        expect(newUserCount).to.equal(userLength)
+        return User.findOneAndRemove({ username: 'testUser' }, function (err) { return err })
+    }).then((user) => {
+        expect(user).to.have.property('username').to.equal("testUser");
+        return User.findById(user._id)
+    }).then((user) => {
+        expect(user).to.equal(null);
         done();
     }).catch((err) => {
         done(err);

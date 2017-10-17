@@ -15,7 +15,9 @@ module.exports = function(app) {
     app.post('/posts/:postId/comments/:commentId/replies', function (req, res, next) {
         Post.findById(req.params.postId).exec(function(err, post) {
             var comment = post.comments.id(req.params.commentId)
+            console.log(req.body)
             comment.comments.unshift(req.body)
+            post.markModified('comments')
             post.save()
             res.redirect('/posts/' + post._id)
         })
