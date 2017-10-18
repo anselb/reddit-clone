@@ -93,4 +93,10 @@ module.exports = function(app) {
         // });
     })
 
+    app.delete('/posts/:id', function (req, res) {
+        Post.findByIdAndRemove(req.params.id, function (err) {
+            res.redirect('/')
+        })
+    })
+
 }
