@@ -9,6 +9,12 @@ module.exports = function(app) {
         res.render('sign-up')
     })
 
+    //Log out user
+    app.get('/logout', function (req, res, next) {
+        res.clearCookie('nToken');
+        res.redirect('/');
+    });
+
     //POST(create) new user
     app.post('/sign-up', function (req, res, next) {
         //create instance of Post model

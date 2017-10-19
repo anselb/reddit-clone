@@ -2,7 +2,7 @@
 
 <h1>Posts</h1>
 
-<a href="/posts/new">Write a post</a>
+<a class="btn btn-default" href="/posts/new" role="button">Write a post</a>
 
 {{#each posts}}
     <a href="/posts/{{this._id}}">
@@ -10,22 +10,22 @@
     </a>
 
     <div>
-    <a href="{{this.url}}" target="_blank">
-        {{this.url}}
-    </a>
-    </div>
-    
-    <div>
-    <a href="/n/{{this.subreddit}}">
-        {{this.subreddit}}
-    </a>
+        <a href="{{this.url}}" target="_blank">
+            {{this.url}}
+        </a>
     </div>
 
-    <a href="/posts/{{this._id}}/edit">
-        Edit
-    </a>
+    <div>
+        <a href="/n/{{this.subreddit}}">
+            {{this.subreddit}}
+        </a>
+    </div>
 
     <form method="POST" action="/posts/{{this._id}}?_method=DELETE">
-        <button type="submit">Delete</button>
+        <a class="btn btn-default" href="/posts/{{this._id}}/edit" role="button">
+            Edit
+        </a>
+
+        <button class="btn btn-default" type="submit">Delete</button>
     </form>
 {{/each}}

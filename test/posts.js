@@ -3,11 +3,13 @@ var chaiHttp = require('chai-http')
 var should = chai.should()
 var Post = require('../models/post')
 var User = require('../models/user')
+var mongoose = require('mongoose')
 var expect = chai.expect;
 
 // var agent = chai.request.agent(server)
 
 chai.use(chaiHttp)
+mongoose.Promise = global.Promise
 
 it('Should return an array of posts', (done) => {
     Post.find({}).then((posts) => {       // Searches for all Posts
@@ -138,9 +140,11 @@ it('Should remove a user', (done) => {
         return User.findOneAndRemove({ username: 'testUser' }, function (err) { return err })
     }).then((user) => {
         expect(user).to.have.property('username').to.equal("testUser");
-        return User.findById(user._id)
+        if (User.findById(user._id) === null) {
+            return 'null'
+        }
     }).then((user) => {
-        expect(user).to.equal(null);
+        expect(user).to.equal(undefined);
         done();
     }).catch((err) => {
         done(err);
